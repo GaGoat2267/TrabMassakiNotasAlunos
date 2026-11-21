@@ -7,7 +7,8 @@ Programa em Python que simula o **módulo de fechamento de notas de uma turma**.
 - Pede o **nome do aluno** e funciona em laço (`while`) até o usuário digitar **SAIR** no campo do nome (aceita `SAIR`, `sair`, `Sair`...).
 - Para cada aluno, lê **3 notas decimais de 0.0 a 10.0** (aceita ponto ou vírgula; repete a pergunta se o valor for inválido ou estiver fora da faixa).
 - Calcula a **média aritmética simples**: `(n1 + n2 + n3) / 3`. Os parênteses garantem que a soma é feita antes da divisão, respeitando a precedência dos operadores.
-- Ao encerrar, mostra uma tabela-resumo com as notas e a média de cada aluno.
+- Informa a **situação**: **Aprovado** se a média for maior ou igual a 6.0, senão **Reprovado**. A nota de corte está na constante `MEDIA_APROVACAO` do arquivo `fechamento_notas.py`, e é só trocar o valor se o professor definir outra.
+- Ao encerrar, mostra uma tabela-resumo com as notas, a média e a situação de cada aluno, e quantos foram aprovados e reprovados.
 
 ## Como rodar no VS Code
 

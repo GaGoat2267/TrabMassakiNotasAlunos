@@ -11,7 +11,7 @@ import secrets
 
 from flask import Flask, redirect, render_template_string, request, session, url_for
 
-from fechamento_notas import NOTA_MAXIMA, NOTA_MINIMA, QTD_NOTAS, calcular_media
+from fechamento_notas import MEDIA_APROVACAO, NOTA_MAXIMA, NOTA_MINIMA, QTD_NOTAS, calcular_media, situacao
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 MAX_ALUNOS = 200  # limite para o cookie de sessão não crescer sem fim
@@ -69,7 +69,9 @@ button.sec{background:#fff;border-color:#C9D3F0}button:hover{border-color:var(--
 .ok{background:#F6FFD0;border:1px solid #B9FC01;color:#3F4F00;border-radius:9px;padding:10px 12px;margin-bottom:14px}
 table{width:100%;border-collapse:collapse}th,td{padding:10px 8px;border-bottom:1px solid #E6EBFA;text-align:right}
 th:first-child,td:first-child{text-align:left}th{font-size:.78rem;text-transform:uppercase;color:var(--mudo);letter-spacing:.04em}
-td.media{font-weight:800;color:var(--azul)}.vazio{color:var(--mudo)}
+td.media{font-weight:800;color:var(--azul)}
+.sit{display:inline-block;border-radius:999px;padding:2px 10px;font-size:.8rem;font-weight:700}
+.sit.ap{background:#E4EBFF;color:var(--azul)}.sit.rp{background:#FDE6E9;color:#9B1C2B}.vazio{color:var(--mudo)}
 @media(max-width:640px){form.novo{grid-template-columns:1fr 1fr}form.novo label:first-child{grid-column:1/-1}}
 </style></head><body>
 <header><div><h1><b>Notas</b>Fechamento de notas da turma</h1>
@@ -93,9 +95,10 @@ td.media{font-weight:800;color:var(--azul)}.vazio{color:var(--mudo)}
 {% endif %}
 <section class="card"><h2>Alunos cadastrados ({{ alunos|length }})</h2>
 {% if alunos %}
-  <table><thead><tr><th>Aluno</th>{% for i in range(1, qtd + 1) %}<th>Nota {{ i }}</th>{% endfor %}<th>Média</th></tr></thead><tbody>
-  {% for a in alunos %}<tr><td>{{ a.nome }}</td>{% for n in a.notas %}<td>{{ '%.1f'|format(n) }}</td>{% endfor %}<td class="media">{{ '%.2f'|format(a.media) }}</td></tr>{% endfor %}
+  <table><thead><tr><th>Aluno</th>{% for i in range(1, qtd + 1) %}<th>Nota {{ i }}</th>{% endfor %}<th>Média</th><th>Situação</th></tr></thead><tbody>
+  {% for a in alunos %}<tr><td>{{ a.nome }}</td>{% for n in a.notas %}<td>{{ '%.1f'|format(n) }}</td>{% endfor %}<td class="media">{{ '%.2f'|format(a.media) }}</td><td>{% if a.media >= aprovacao %}<span class="sit ap">Aprovado</span>{% else %}<span class="sit rp">Reprovado</span>{% endif %}</td></tr>{% endfor %}
   </tbody></table>
+<p class="vazio" style="margin:12px 0 0">Aprovados: {{ aprovados }} · Reprovados: {{ alunos|length - aprovados }} · Aprovação com média a partir de {{ '%.1f'|format(aprovacao) }}</p>
 {% else %}<p class="vazio">Nenhum aluno cadastrado.</p>{% endif %}
 {% if encerrado or alunos %}
   <form method="post" action="{{ url_for('reiniciar') }}" style="margin-top:14px"><button class="sec" type="submit">Novo fechamento (limpar)</button></form>
@@ -106,7 +109,9 @@ td.media{font-weight:800;color:var(--azul)}.vazio{color:var(--mudo)}
 def desenhar(erros=None, nome="", valores=("", "", "")):
     alunos = session.get("alunos", [])
     return render_template_string(PAGINA, alunos=alunos, encerrado=session.get("encerrado", False),
-                                 erros=erros or [], nome=nome, valores=valores, qtd=QTD_NOTAS)
+                                 erros=erros or [], nome=nome, valores=valores, qtd=QTD_NOTAS,
+                                 aprovacao=MEDIA_APROVACAO,
+                                 aprovados=sum(1 for a in alunos if a["media"] >= MEDIA_APROVACAO))
 
 
 @app.get("/")

@@ -7,6 +7,7 @@ simples e repete até o usuário digitar SAIR no campo do nome.
 QTD_NOTAS = 3
 NOTA_MINIMA = 0.0
 NOTA_MAXIMA = 10.0
+MEDIA_APROVACAO = 6.0  # média mínima para aprovação (mude aqui se o professor definir outra)
 
 
 def ler_nome():
@@ -38,6 +39,11 @@ def calcular_media(n1, n2, n3):
     return (n1 + n2 + n3) / 3
 
 
+def situacao(media):
+    """Aprovado se a média for maior ou igual à média de aprovação; senão, Reprovado."""
+    return "Aprovado" if media >= MEDIA_APROVACAO else "Reprovado"
+
+
 def main():
     print("=== FECHAMENTO DE NOTAS DA TURMA ===")
     alunos = []
@@ -50,16 +56,18 @@ def main():
         notas = [ler_nota(i) for i in range(1, QTD_NOTAS + 1)]
         media = calcular_media(*notas)
         alunos.append((nome, notas, media))
-        print(f"  Média de {nome}: {media:.2f}")
+        print(f"  Média de {nome}: {media:.2f} - {situacao(media)}")
 
     print("\n=== RESUMO ===")
     if not alunos:
         print("Nenhum aluno cadastrado.")
         return
-    print(f"{'Aluno':<20}{'Nota 1':>8}{'Nota 2':>8}{'Nota 3':>8}{'Média':>8}")
+    print(f"{'Aluno':<20}{'Nota 1':>8}{'Nota 2':>8}{'Nota 3':>8}{'Média':>8}  Situação")
     for nome, notas, media in alunos:
-        print(f"{nome:<20}{notas[0]:>8.1f}{notas[1]:>8.1f}{notas[2]:>8.1f}{media:>8.2f}")
+        print(f"{nome:<20}{notas[0]:>8.1f}{notas[1]:>8.1f}{notas[2]:>8.1f}{media:>8.2f}  {situacao(media)}")
+    aprovados = sum(1 for _, _, m in alunos if m >= MEDIA_APROVACAO)
     print(f"\nAlunos cadastrados: {len(alunos)}")
+    print(f"Aprovados: {aprovados} | Reprovados: {len(alunos) - aprovados}")
 
 
 if __name__ == "__main__":
