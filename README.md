@@ -18,6 +18,31 @@ Programa em Python que simula o **módulo de fechamento de notas de uma turma**.
 
 Ou, no terminal: `python fechamento_notas.py`
 
+## Versão web (Flask)
+
+O arquivo `app.py` é a mesma lógica em um site: formulário com nome e 3 notas, tabela com as médias e botão **Encerrar cadastro (SAIR)**. Digitar SAIR no nome também encerra. Cada visitante tem a própria lista.
+
+Para testar no computador: `pip install -r requirements.txt` e depois `python app.py` (abre em http://localhost:5000).
+
+### Colocar no PythonAnywhere
+
+Troque `USUARIO` pelo nome da sua conta do PythonAnywhere.
+
+1. Aba **Consoles** → **Bash** e rode: `git clone https://github.com/GaGoat2267/TrabMassakiNotasAlunos.git`
+2. Aba **Web** → **Add a new web app** → Next → **Manual configuration** → escolha o Python mais novo.
+3. Em **Code**, preencha **Source code** e **Working directory** com `/home/USUARIO/TrabMassakiNotasAlunos`
+4. Clique no link do **WSGI configuration file**, apague tudo e cole:
+
+```python
+import sys
+sys.path.insert(0, '/home/USUARIO/TrabMassakiNotasAlunos')
+from app import app as application
+```
+
+5. Salve, volte na aba **Web** e clique em **Reload**. O site fica em `https://USUARIO.pythonanywhere.com`.
+
+Para atualizar depois: no Bash, `cd ~/TrabMassakiNotasAlunos && git pull`, e **Reload** na aba Web.
+
 ## Exemplo
 
 ```
