@@ -21,7 +21,7 @@ Ou, no terminal: `python fechamento_notas.py`
 
 ## Versão web (Flask)
 
-O arquivo `app.py` é a mesma lógica em um site: formulário com nome e 3 notas, tabela com as médias e botão **Encerrar cadastro (SAIR)**. Digitar SAIR no nome também encerra. Cada visitante tem a própria lista.
+O arquivo `app.py` é a mesma lógica em um site: formulário com nome e 3 notas, tabela com as médias e botão **Encerrar cadastro (SAIR)**. Digitar SAIR no nome também encerra. Visual futurista (vidro, neon e animações), com média ao vivo enquanto você digita, indicadores no topo e um anel de nota para cada aluno. Cada visitante tem a própria lista.
 
 Para testar no computador: `pip install -r requirements.txt` e depois `python app.py` (abre em http://localhost:5000).
 
